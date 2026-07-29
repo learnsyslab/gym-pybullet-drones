@@ -454,6 +454,14 @@ class BaseAviary(gym.Env):
         Allocation and zero-ing of the variables and PyBullet's parameters/objects
         in the `reset()` function.
 
+        Note for subclasses: this reloads the drone body from `assets/<DRONE_MODEL>.urdf`
+        via `p.loadURDF()` every time it runs — i.e. on every `reset()`, not just once at
+        construction. Any dynamics customization applied at runtime via `p.changeDynamics()`
+        (e.g. overriding mass/inertia beyond what the URDF specifies) is lost on the next
+        `reset()` unless it is reapplied after `_housekeeping()` runs again. Subclasses that
+        need such overrides to persist across episodes should reapply them both after
+        `super().__init__()` and after `super().reset()`.
+
         """
         #### Initialize/reset counters and zero-valued variables ###
         self.RESET_TIME = time.time()
@@ -987,6 +995,16 @@ class BaseAviary(gym.Env):
 
         This method is nothing more than a custom XML parser for the .urdf
         files in folder `assets/`.
+
+        Note for subclasses: `__init__()` derives several further constants from this
+        method's return values immediately afterward — `self.GRAVITY`, `self.HOVER_RPM`,
+        `self.MAX_RPM`, `self.MAX_THRUST`, `self.MAX_XY_TORQUE`, `self.MAX_Z_TORQUE`, and
+        `self.GND_EFF_H_CLIP`. These are computed once from the URDF-derived `self.M`/
+        `self.L`/`self.KF`/etc. and are not recomputed automatically. Subclasses that
+        override the underlying physical constants for non-stock physics (e.g. via
+        `p.changeDynamics()`) should recompute these derived constants too if they rely on
+        the stock `_physics()`/`_groundEffect()`/`_drag()`/`_downwash()` implementations,
+        which reference them directly.
 
         """
         URDF_TREE = etxml.parse(pkg_resources.resource_filename('gym_pybullet_drones', 'assets/'+self.URDF)).getroot()
