@@ -85,7 +85,7 @@ class BetaAviary(BaseAviary):
         # Spawn SITL Betaflight instances (must have been created with assets/clone_bfs/sh first)
         for i in range(num_drones):
             FOLDER = os.path.dirname(os.path.abspath(__file__))+'/../../betaflight_sitl/bf'+str(i)+'/'
-            cmd = f"gnome-terminal -- bash -c 'cd {FOLDER} && ./obj/main/betaflight_SITL.elf; exec bash'"
+            cmd = f"bash -c 'cd {FOLDER} && ./obj/main/betaflight_SITL.elf; exec bash'"
             subprocess.Popen(cmd, shell=True)
         time.sleep(2)
         

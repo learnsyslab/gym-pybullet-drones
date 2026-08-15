@@ -30,6 +30,7 @@ cd temp/
 git checkout cafe727 #latest commit at the time of writing the gym-pybullet-drones Readme
 
 sed -i "s/delayMicroseconds_real(50);/\/\/delayMicroseconds_real(50);/g" ./src/main/main.c
+sed -i "s/\"-ABEFR\"/{ '-', 'A', 'B', 'E', 'F', 'R' }/g" ./src/main/drivers/vtx_table.c
 
 # Prepare
 make arm_sdk_install 
