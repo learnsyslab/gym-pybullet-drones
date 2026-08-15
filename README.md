@@ -17,13 +17,13 @@ This is a minimalist refactoring of the original `gym-pybullet-drones` repositor
 
 ## Installation
 
-Tested on Intel x64/Ubuntu 22.04 and Apple Silicon/macOS 26.2.
+Tested on Intel x64/Ubuntu 24.04 and Apple Silicon/macOS 26.
 
 ```sh
 git clone https://github.com/learnsyslab/gym-pybullet-drones.git
 cd gym-pybullet-drones/
 
-conda create -n drones python=3.10
+conda create -n drones python=3.12
 conda activate drones
 
 pip3 install -e . # if needed, `sudo apt install build-essential` to install `gcc` and build `pybullet`
@@ -52,10 +52,14 @@ python3 downwash.py
 
 ```sh
 cd gym_pybullet_drones/examples/
-python learn.py # task: single drone hover at z == 1.0
-python learn.py --multiagent true # task: 2-drone hover at z == 1.2 and 0.7
 
+# single agent
+python learn.py # task: single drone hover at z == 1.0
 LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --model_path "results/${LATEST_MODEL}/best_model.zip" # play and visualize the most recent learned policy after training
+
+# multi-agent
+python learn.py --multiagent true # task: 2-drone hover at z == 1.2 and 0.7
+LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --multiagent true --model_path "results/${LATEST_MODEL}/best_model.zip" # play and visualize the most recent learned policy after training
 ```
 
 <img src="gym_pybullet_drones/assets/rl.gif" alt="rl example" width="375"> <img src="gym_pybullet_drones/assets/marl.gif" alt="marl example" width="375">

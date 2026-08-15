@@ -4,7 +4,7 @@ import time
 import collections
 from datetime import datetime
 import xml.etree.ElementTree as etxml
-import pkg_resources
+from importlib.resources import files
 from PIL import Image
 # import pkgutil
 # egl = pkgutil.get_loader('eglRenderer')
@@ -483,7 +483,7 @@ class BaseAviary(gym.Env):
         #### Load ground plane, drone and obstacles models #########
         self.PLANE_ID = p.loadURDF("plane.urdf", physicsClientId=self.CLIENT)
 
-        self.DRONE_IDS = np.array([p.loadURDF(pkg_resources.resource_filename('gym_pybullet_drones', 'assets/'+self.URDF),
+        self.DRONE_IDS = np.array([p.loadURDF(str(files('gym_pybullet_drones') / 'assets' / self.URDF),
                                               self.INIT_XYZS[i,:],
                                               p.getQuaternionFromEuler(self.INIT_RPYS[i,:]),
                                               flags = p.URDF_USE_INERTIA_FROM_FILE,
@@ -989,7 +989,7 @@ class BaseAviary(gym.Env):
         files in folder `assets/`.
 
         """
-        URDF_TREE = etxml.parse(pkg_resources.resource_filename('gym_pybullet_drones', 'assets/'+self.URDF)).getroot()
+        URDF_TREE = etxml.parse(str(files('gym_pybullet_drones') / 'assets' / self.URDF)).getroot()
         M = float(URDF_TREE[1][0][1].attrib['value'])
         L = float(URDF_TREE[0].attrib['arm'])
         THRUST2WEIGHT_RATIO = float(URDF_TREE[0].attrib['thrust2weight'])

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import xml.etree.ElementTree as etxml
-import pkg_resources
+from importlib.resources import files
 import socket 
 import struct
 
@@ -233,7 +233,7 @@ class CTBRControl(object):
         """
         #### Get the XML tree of the drone model to control ########
         URDF = self.DRONE_MODEL.value + ".urdf"
-        path = pkg_resources.resource_filename('gym_pybullet_drones', 'assets/'+URDF)
+        path = str(files('gym_pybullet_drones') / 'assets' / URDF)
         URDF_TREE = etxml.parse(path).getroot()
         #### Find and return the desired parameter #################
         if parameter_name == 'm':
