@@ -9,7 +9,7 @@ from gym_pybullet_drones.control.BaseControl import BaseControl
 from gym_pybullet_drones.utils.enums import DroneModel
 
 
-class MRAC(BaseControl):
+class MRACControl(BaseControl):
     """Model Reference Adaptive Controller class for Crazyflies.
 
         Based on the implementation of https://github.com/caoty777/Quadcoptor-Adaptive-Flight-Control

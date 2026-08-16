@@ -7,7 +7,7 @@
 
 # gym-pybullet-drones
 
-This is a minimalist refactoring of the original `gym-pybullet-drones` repository, designed for compatibility with [`gymnasium`](https://github.com/Farama-Foundation/Gymnasium), [`stable-baselines3` 2.0](https://github.com/DLR-RM/stable-baselines3/pull/1327), and [`betaflight`](https://github.com/betaflight/betaflight)/[`crazyflie-firmware`](https://github.com/bitcraze/crazyflie-firmware/) SITL.
+This is a minimalist refactoring of the original `gym-pybullet-drones` repository, designed for compatibility with [`gymnasium`](https://github.com/Farama-Foundation/Gymnasium), [`stable-baselines3` 2.0](https://github.com/DLR-RM/stable-baselines3/pull/1327), and [`betaflight`](https://github.com/betaflight/betaflight) SITL.
 
 > **NEWS**: `gym-pybullet-drones` was featured in [GitHub's Maintainer Spotlight 2026](https://maintainermonth.github.com/academia/gym-pybullet-drones-maintainer-spotlight)
 
@@ -33,12 +33,13 @@ pip3 install -e . # if needed, `sudo apt install build-essential` to install `gc
 
 ## Use
 
-### PID control examples
+### Control examples
 
 ```sh
 cd gym_pybullet_drones/examples/
 python3 pid.py # position and velocity reference
 python3 pid_velocity.py # desired velocity reference
+python3 mrac.py # adaptive controller example
 ```
 
 ### Downwash effect example
@@ -90,15 +91,6 @@ In another terminal, run the example
 conda activate drones
 cd gym_pybullet_drones/examples/
 python3 beta.py --num_drones 1 # check the steps in the file's docstrings to use multiple drones
-```
-
-### `pycffirmware` Python Bindings example (multiplatform, single-drone)
-
-First, install [`pycffirmware`](https://github.com/learnsyslab/pycffirmware?tab=readme-ov-file#installation) for Ubuntu, macOS, or Windows, then
-
-```sh
-cd gym_pybullet_drones/examples/
-python3 cf.py
 ```
 
 ## Citation

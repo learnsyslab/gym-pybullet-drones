@@ -7,7 +7,7 @@ import pybullet_data
 
 from gym_pybullet_drones.utils.enums import DroneModel, Physics
 from gym_pybullet_drones.envs.CtrlAviary import CtrlAviary
-from gym_pybullet_drones.control.MRAC import MRAC
+from gym_pybullet_drones.control.MRACControl import MRACControl
 from gym_pybullet_drones.utils.Logger import Logger
 from gym_pybullet_drones.utils.utils import sync, str2bool
 
@@ -73,7 +73,7 @@ def run(
     
     #### Initialize the controllers ############################
     if drone in [DroneModel.CF2X, DroneModel.CF2P, DroneModel.RACE]:
-        ctrl = [MRAC(drone_model=drone) for i in range(num_drones)]
+        ctrl = [MRACControl(drone_model=drone) for i in range(num_drones)]
 
     
     #### Run the simulation ####################################
