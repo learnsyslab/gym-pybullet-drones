@@ -127,9 +127,8 @@ If you wish, please cite our [IROS 2021 paper](https://arxiv.org/abs/2103.02142)
 > UTIAS / [Learning Systems and Robotics Lab](https://github.com/learnsyslab) / [Vector Institute](https://github.com/VectorInstitute) / University of Cambridge's [Prorok Lab](https://github.com/proroklab)
 
 <!--
-## WIP/Desired Contributions/PRs
+## TODOs
 
-- [ ] Multi-drone `crazyflie-firmware` SITL support
 - [ ] Use SITL services with steppable simulation
 - [ ] Add motor delay, advanced ESC modeling by implementing a buffer in `BaseAviary._dynamics()`
 - [ ] Replace `rpy` with quaternions (and `ang_vel` with body rates) by editing `BaseAviary._updateAndStoreKinematicInformation()`, `BaseAviary._getDroneStateVector()`, and the `.computeObs()` methods of relevant subclasses
