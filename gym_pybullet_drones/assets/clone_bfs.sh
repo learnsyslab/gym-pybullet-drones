@@ -11,11 +11,11 @@ fi
 # Extract command-line arguments
 desired_max_num_drones="$1"
 
-# Create gitignored directory in gym-pybullet-donres
+# Create gitignored directory in gym-pybullet-drones
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 cd ../../
-mkdir betaflight_sitl/
+mkdir -p betaflight_sitl/
 cd betaflight_sitl/
 
 # Step 1: Clone and open betaflight's source (at the time of writing, branch `master`, future release 4.5)):
@@ -31,6 +31,7 @@ git checkout cafe727 #latest commit at the time of writing the gym-pybullet-dron
 
 sed -i "s/delayMicroseconds_real(50);/\/\/delayMicroseconds_real(50);/g" ./src/main/main.c
 sed -i "s/\"-ABEFR\"/{ '-', 'A', 'B', 'E', 'F', 'R' }/g" ./src/main/drivers/vtx_table.c
+sed -i "s/^void IOConfigGPIO(IO_t io, ioConfig_t cfg)/void IOHi(IO_t io) { UNUSED(io); }\nvoid IOLo(IO_t io) { UNUSED(io); }\n\nvoid IOConfigGPIO(IO_t io, ioConfig_t cfg)/" ./src/main/target/SITL/sitl.c
 
 # Prepare
 make arm_sdk_install 

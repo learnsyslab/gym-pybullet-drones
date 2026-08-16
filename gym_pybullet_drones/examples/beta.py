@@ -11,10 +11,10 @@ Note
 This example will automatically start as many SITL Betaflight as drones
 in the simulation in separate terminals:
 
-    $ cd betaflights/bf0/
+    $ cd betaflight_sitl/bf0/
     $ ./obj/main/betaflight_SITL.elf
 
-    $ cd betaflights/bf1/
+    $ cd betaflight_sitl/bf1/
     $ ./obj/main/betaflight_SITL.elf
 
     $ ..

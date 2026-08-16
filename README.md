@@ -76,21 +76,13 @@ pytest tests/
 ### Betaflight SITL example (Ubuntu only)
 
 ```sh
-git clone https://github.com/betaflight/betaflight 
-cd betaflight/
-git checkout cafe727 # `master` branch head at the time of writing (future release 4.5)
-make arm_sdk_install # if needed, `apt install curl``
-make TARGET=SITL # comment out line: https://github.com/betaflight/betaflight/blob/master/src/main/main.c#L52
-cp ~/gym-pybullet-drones/gym_pybullet_drones/assets/eeprom.bin ~/betaflight/ # assuming both gym-pybullet-drones/ and betaflight/ were cloned in ~/
-betaflight/obj/main/betaflight_SITL.elf
-```
+# one-time setup: from the repo's top folder, build one SITL executable per drone (e.g. 2)
+cd gym-pybullet-drones/
+./gym_pybullet_drones/assets/clone_bfs.sh 2 # if needed, `apt install curl`
 
-In another terminal, run the example
-
-```sh
-conda activate drones
+# run the example
 cd gym_pybullet_drones/examples/
-python3 beta.py --num_drones 1 # check the steps in the file's docstrings to use multiple drones
+python3 beta.py --num_drones 2 # must be <= the number passed to clone_bfs.sh
 ```
 
 ## Citation
