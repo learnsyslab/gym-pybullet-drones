@@ -11,7 +11,7 @@ This is a minimalist refactoring of the original `gym-pybullet-drones` repositor
 
 > **NEWS**: `gym-pybullet-drones` was featured in [GitHub's Maintainer Spotlight 2026](https://maintainermonth.github.com/academia/gym-pybullet-drones-maintainer-spotlight)
 
-> **NOTE**: if you want to access the original codebase, presented at IROS in 2021, please `git checkout [paper|master]`
+> **NOTE**: if you want to access the original IROS 2021 codebase, please `git checkout [paper|master]`
 
 <img src="gym_pybullet_drones/assets/helix.gif" alt="formation flight" width="325"> <img src="gym_pybullet_drones/assets/helix.png" alt="control info" width="425">
 
