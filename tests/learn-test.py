@@ -16,9 +16,17 @@ reinforcement learning library `stable-baselines3`.
 
 """
 import os
+os.environ.setdefault('KMP_DUPLICATE_LIB_OK', 'TRUE')
+import sys
 import time
+from pathlib import Path
 from datetime import datetime
 import argparse
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import gymnasium as gym
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,7 +39,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from gym_pybullet_drones.utils.Logger import Logger
 from gym_pybullet_drones.envs.HoverAviary import HoverAviary
 from gym_pybullet_drones.envs.MultiHoverAviary import MultiHoverAviary
-from gym_pybullet_drones.envs.UnderactuatedHoverAviary import UnderactuatedHoverAviary
+from gym_pybullet_drones.envs.UnderactuatedHoverPriorAviary import UnderactuatedHoverPriorAviary
 from gym_pybullet_drones.utils.utils import sync, str2bool
 from gym_pybullet_drones.utils.enums import ObservationType, ActionType
 
@@ -41,7 +49,7 @@ DEFAULT_OUTPUT_FOLDER = 'results'
 DEFAULT_COLAB = False
 
 DEFAULT_OBS = ObservationType('kin') # 'kin' or 'rgb'
-DEFAULT_ACT = ActionType('one_d_rpm') # 'rpm' or 'pid' or 'vel' or 'one_d_rpm' or 'one_d_pid'
+DEFAULT_ACT = ActionType('rpm') # 'rpm' or 'pid' or 'vel' or 'one_d_rpm' or 'one_d_pid'
 DEFAULT_AGENTS = 2
 DEFAULT_MA = False
 
@@ -52,12 +60,12 @@ def run(multiagent=DEFAULT_MA, output_folder=DEFAULT_OUTPUT_FOLDER, gui=DEFAULT_
         os.makedirs(filename+'/')
 
     if underactuated:
-        train_env = make_vec_env(UnderactuatedHoverAviary,
-                                 env_kwargs=dict(obs=DEFAULT_OBS, act=DEFAULT_ACT, disabled_motor=0),
+        train_env = make_vec_env(UnderactuatedHoverPriorAviary,
+                                 env_kwargs=dict(obs=DEFAULT_OBS, act=DEFAULT_ACT, degraded_motor=0, motor_reduction=0.35),
                                  n_envs=1,
                                  seed=0
                                  )
-        eval_env = UnderactuatedHoverAviary(obs=DEFAULT_OBS, act=DEFAULT_ACT, disabled_motor=0)
+        eval_env = UnderactuatedHoverPriorAviary(obs=DEFAULT_OBS, act=DEFAULT_ACT, degraded_motor=0, motor_reduction=0.35)
     elif not multiagent:
         train_env = make_vec_env(HoverAviary,
                                  env_kwargs=dict(obs=DEFAULT_OBS, act=DEFAULT_ACT),
@@ -136,12 +144,16 @@ def run(multiagent=DEFAULT_MA, output_folder=DEFAULT_OUTPUT_FOLDER, gui=DEFAULT_
 
     #### Show (and record a video of) the model's performance ##
     if underactuated:
-        test_env = UnderactuatedHoverAviary(gui=gui,
-                                            obs=DEFAULT_OBS,
-                                            act=DEFAULT_ACT,
-                                            record=record_video,
-                                            disabled_motor=0)
-        test_env_nogui = UnderactuatedHoverAviary(obs=DEFAULT_OBS, act=DEFAULT_ACT, disabled_motor=0)
+        test_env = UnderactuatedHoverPriorAviary(gui=gui,
+                                                obs=DEFAULT_OBS,
+                                                act=DEFAULT_ACT,
+                                                record=record_video,
+                                                degraded_motor=0,
+                                                motor_reduction=0.35)
+        test_env_nogui = UnderactuatedHoverPriorAviary(obs=DEFAULT_OBS,
+                                                      act=DEFAULT_ACT,
+                                                      degraded_motor=0,
+                                                      motor_reduction=0.35)
     elif not multiagent:
         test_env = HoverAviary(gui=gui,
                                obs=DEFAULT_OBS,
