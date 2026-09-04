@@ -157,6 +157,49 @@ class BaseRLAviary(BaseAviary):
 
     ################################################################################
 
+    def _getHoverRPM(self,
+                     nth_drone: int
+                     ) -> float:
+        """Return the hover trim for a drone's current physical mass.
+
+        ``HOVER_RPM`` is computed once from the mass in the URDF.  PyBullet also
+        allows callers to randomize a loaded body's mass with ``changeDynamics``;
+        in that case the old trim no longer balances gravity and the one-dimensional
+        RPM action cannot learn a stable hover.  Read the live base mass for
+        PyBullet-backed physics so domain-randomized environments stay trim-aware.
+
+        The explicit ``DYN`` backend integrates against the URDF parameters stored
+        on the environment, so it intentionally keeps the original trim.  During
+        construction (before bodies are loaded), or if a body has been removed,
+        the URDF-derived value is used as a safe fallback.
+
+        Parameters
+        ----------
+        nth_drone : int
+            Index of the drone whose current trim should be returned.
+
+        Returns
+        -------
+        float
+            RPM that produces one quarter of the current weight under the
+            environment's per-rotor thrust coefficient.
+        """
+        fallback = float(self.HOVER_RPM)
+        if getattr(self, "PHYSICS", None) == Physics.DYN or not hasattr(self, "DRONE_IDS"):
+            return fallback
+        if getattr(self, "KF", 0) <= 0 or not hasattr(self, "CLIENT"):
+            return fallback
+        try:
+            body_id = int(self.DRONE_IDS[nth_drone])
+            mass = float(p.getDynamicsInfo(body_id, -1, physicsClientId=self.CLIENT)[0])
+        except (p.error, IndexError, KeyError, TypeError, ValueError):
+            return fallback
+        if not np.isfinite(mass) or mass <= 0:
+            return fallback
+        return float(np.sqrt(self.G * mass / (4 * self.KF)))
+
+    ################################################################################
+
     def _preprocessAction(self,
                           action
                           ):
@@ -189,7 +232,8 @@ class BaseRLAviary(BaseAviary):
         for k in range(action.shape[0]):
             target = action[k, :]
             if self.ACT_TYPE == ActionType.RPM:
-                rpm[k,:] = np.array(self.HOVER_RPM * (1+0.05*target))
+                hover_rpm = self._getHoverRPM(k)
+                rpm[k,:] = np.array(hover_rpm * (1+0.05*target))
             elif self.ACT_TYPE == ActionType.PID:
                 state = self._getDroneStateVector(k)
                 next_pos = self._calculateNextStep(
@@ -222,7 +266,8 @@ class BaseRLAviary(BaseAviary):
                                                         )
                 rpm[k,:] = temp
             elif self.ACT_TYPE == ActionType.ONE_D_RPM:
-                rpm[k,:] = np.repeat(self.HOVER_RPM * (1+0.05*target), 4)
+                hover_rpm = self._getHoverRPM(k)
+                rpm[k,:] = np.repeat(hover_rpm * (1+0.05*target), 4)
             elif self.ACT_TYPE == ActionType.ONE_D_PID:
                 state = self._getDroneStateVector(k)
                 res, _, _ = self.ctrl[k].computeControl(control_timestep=self.CTRL_TIMESTEP,
