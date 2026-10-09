@@ -139,8 +139,7 @@ class BaseAviary(gym.Env):
             self.dep = np.ones(((self.NUM_DRONES, self.IMG_RES[1], self.IMG_RES[0])))
             self.seg = np.zeros(((self.NUM_DRONES, self.IMG_RES[1], self.IMG_RES[0])))
             if self.IMG_CAPTURE_FREQ%self.PYB_STEPS_PER_CTRL != 0:
-                print("[ERROR] in BaseAviary.__init__(), PyBullet and control frequencies incompatible with the desired video capture frame rate ({:f}Hz)".format(self.IMG_FRAME_PER_SEC))
-                exit()
+                raise ValueError("in BaseAviary.__init__(), PyBullet and control frequencies incompatible with the desired video capture frame rate ({:f}Hz)".format(self.IMG_FRAME_PER_SEC))
             if self.RECORD:
                 for i in range(self.NUM_DRONES):
                     os.makedirs(os.path.dirname(self.ONBOARD_IMG_PATH+"/drone_"+str(i)+"/"), exist_ok=True)
@@ -198,13 +197,13 @@ class BaseAviary(gym.Env):
         elif np.array(initial_xyzs).shape == (self.NUM_DRONES,3):
             self.INIT_XYZS = initial_xyzs
         else:
-            print("[ERROR] invalid initial_xyzs in BaseAviary.__init__(), try initial_xyzs.reshape(NUM_DRONES,3)")
+            raise ValueError("invalid initial_xyzs in BaseAviary.__init__(), try initial_xyzs.reshape(NUM_DRONES,3)")
         if initial_rpys is None:
             self.INIT_RPYS = np.zeros((self.NUM_DRONES, 3))
         elif np.array(initial_rpys).shape == (self.NUM_DRONES, 3):
             self.INIT_RPYS = initial_rpys
         else:
-            print("[ERROR] invalid initial_rpys in BaseAviary.__init__(), try initial_rpys.reshape(NUM_DRONES,3)")
+            raise ValueError("invalid initial_rpys in BaseAviary.__init__(), try initial_rpys.reshape(NUM_DRONES,3)")
         #### Create action and observation spaces ##################
         self.action_space = self._actionSpace()
         self.observation_space = self._observationSpace()
@@ -587,8 +586,7 @@ class BaseAviary(gym.Env):
 
         """
         if self.IMG_RES is None:
-            print("[ERROR] in BaseAviary._getDroneImages(), remember to set self.IMG_RES to np.array([width, height])")
-            exit()
+            raise ValueError("in BaseAviary._getDroneImages(), remember to set self.IMG_RES to np.array([width, height])")
         rot_mat = np.array(p.getMatrixFromQuaternion(self.quat[nth_drone, :])).reshape(3, 3)
         #### Set target point, camera view and projection matrices #
         target = np.dot(rot_mat,np.array([1000, 0, 0])) + np.array(self.pos[nth_drone, :])
@@ -648,8 +646,7 @@ class BaseAviary(gym.Env):
         elif img_type == ImageType.BW:
             temp = (np.sum(img_input[:, :, 0:2], axis=2) / 3).astype('uint8')
         else:
-            print("[ERROR] in BaseAviary._exportImage(), unknown ImageType")
-            exit()
+            raise ValueError("in BaseAviary._exportImage(), unknown ImageType")
         if img_type != ImageType.RGB:
             (Image.fromarray(temp)).save(os.path.join(path,"frame_"+str(frame_num)+".png"))
 
