@@ -123,7 +123,7 @@ def run(multiagent=DEFAULT_MA, output_folder=DEFAULT_OUTPUT_FOLDER, gui=DEFAULT_
     if os.path.isfile(filename+'/best_model.zip'):
         path = filename+'/best_model.zip'
     else:
-        print("[ERROR]: no model under the specified path", filename)
+        raise FileNotFoundError("no model under the specified path: " + filename)
     model = PPO.load(path)
 
     #### Show (and record a video of) the model's performance ##

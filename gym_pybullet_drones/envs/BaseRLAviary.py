@@ -75,7 +75,7 @@ class BaseRLAviary(BaseAviary):
             if drone_model in [DroneModel.CF2X, DroneModel.CF2P]:
                 self.ctrl = [DSLPIDControl(drone_model=DroneModel.CF2X) for i in range(num_drones)]
             else:
-                print("[ERROR] in BaseRLAviary.__init()__, no controller is available for the specified drone_model")
+                raise ValueError("in BaseRLAviary.__init__(), no controller is available for the specified drone_model")
         super().__init__(drone_model=drone_model,
                          num_drones=num_drones,
                          neighbourhood_radius=neighbourhood_radius,
@@ -145,8 +145,7 @@ class BaseRLAviary(BaseAviary):
         elif self.ACT_TYPE in [ActionType.ONE_D_RPM, ActionType.ONE_D_PID]:
             size = 1
         else:
-            print("[ERROR] in BaseRLAviary._actionSpace()")
-            exit()
+            raise ValueError(f"Unknown action type: {self.ACT_TYPE}")
         act_lower_bound = np.array([-1*np.ones(size) for i in range(self.NUM_DRONES)])
         act_upper_bound = np.array([+1*np.ones(size) for i in range(self.NUM_DRONES)])
         #
@@ -234,8 +233,7 @@ class BaseRLAviary(BaseAviary):
                                                         )
                 rpm[k,:] = res
             else:
-                print("[ERROR] in BaseRLAviary._preprocessAction()")
-                exit()
+                raise ValueError(f"Unknown action type: {self.ACT_TYPE}")
         return rpm
 
     ################################################################################
@@ -293,7 +291,7 @@ class BaseRLAviary(BaseAviary):
             return spaces.Dict({"kin": kin, "rgb": rgb, "dep": dep})
 
         else:
-            print("[ERROR] in BaseRLAviary._observationSpace()")
+            raise ValueError("in BaseRLAviary._observationSpace()")
     
     ################################################################################
 
@@ -346,4 +344,4 @@ class BaseRLAviary(BaseAviary):
             return {"kin": kin, "rgb": rgb, "dep": dep}
 
         else:
-            print("[ERROR] in BaseRLAviary._computeObs()")
+            raise ValueError("in BaseRLAviary._computeObs()")
