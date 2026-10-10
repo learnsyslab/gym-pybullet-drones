@@ -68,6 +68,30 @@ LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --model_path "result
 python learn.py --multiagent true
 LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --multiagent true --model_path "results/${LATEST_MODEL}/best_model.zip"
 ```
+### Multi-agent RL with PettingZoo
+
+`PettingZooWrapper` exposes any multi-drone aviary through [PettingZoo](https://pettingzoo.farama.org)'s Parallel API, with one agent per drone (`drone_0`, `drone_1`, ...). That makes it usable with MARL libraries built on PettingZoo.
+
+```python
+from gym_pybullet_drones.envs.MultiHoverAviary import MultiHoverAviary
+from gym_pybullet_drones.utils.PettingZooWrapper import PettingZooWrapper
+
+env = PettingZooWrapper(MultiHoverAviary(num_drones=3))
+observations, infos = env.reset(seed=42)
+while env.agents:
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+env.close()
+```
+
+Each agent receives its own row of the aviary's observation. The aviary's team reward and episode flags are shared by all agents, and `env.state()` returns every drone's kinematics for centralised critics. A runnable version is in `examples/pettingzoo_multiagent.py`.
+
+### Run all tests
+
+```sh
+# from the repo's top folder
+cd gym-pybullet-drones/
+pytest tests/
 
 <img src="gym_pybullet_drones/assets/rl.gif" alt="rl example" width="375"> <img src="gym_pybullet_drones/assets/marl.gif" alt="marl example" width="375">
 
@@ -78,6 +102,7 @@ LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --multiagent true --
 cd gym-pybullet-drones/
 pytest tests/
 ```
+
 
 ### Betaflight SITL example (Ubuntu only)
 
