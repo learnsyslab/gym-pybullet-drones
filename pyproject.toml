@@ -12,7 +12,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pillow = "^12.3"
+pillow = ">=12.3,<14.0"
 setuptools = ">=83"
 torch = "^2.13"
 numpy = "^2.5"
