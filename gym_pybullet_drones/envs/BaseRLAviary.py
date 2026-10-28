@@ -314,7 +314,7 @@ class BaseRLAviary(BaseAviary):
                     if self.RECORD:
                         self._exportImage(img_type=ImageType.RGB,
                                           img_input=self.rgb[i],
-                                          path=self.ONBOARD_IMG_PATH+"drone_"+str(i),
+                                          path=self.ONBOARD_IMG_PATH+"/drone_"+str(i),
                                           frame_num=int(self.step_counter/self.IMG_CAPTURE_FREQ)
                                           )
             if self.OBS_TYPE in (ObservationType.RGB, ObservationType.ALL):
