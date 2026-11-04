@@ -220,8 +220,8 @@ def run(output_folder=DEFAULT_OUTPUT_FOLDER, gui=DEFAULT_GUI, plot=True, colab=D
                        timestamp=i/test_env.aviary.CTRL_FREQ,
                        state=np.hstack([obs[0:3],
                                         np.zeros(4),
-                                        obs[3:15],
-                                        actions[agent]
+                                        obs[3:12],
+                                        np.resize(actions[agent], 4)
                                         ]),
                        control=np.zeros(12)
                        )
