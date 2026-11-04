@@ -86,13 +86,6 @@ env.close()
 
 Each agent receives its own row of the aviary's observation. The aviary's team reward and episode flags are shared by all agents, and `env.state()` returns every drone's kinematics for centralised critics. `examples/pettingzoo_multiagent.py` is a minimal working example: it trains one PPO policy shared by all drones on the PettingZoo environment (reaching the same team reward as `learn.py --multiagent true` in a few minutes on a CPU) and replays it.
 
-### Run all tests
-
-```sh
-# from the repo's top folder
-cd gym-pybullet-drones/
-pytest tests/
-
 <img src="gym_pybullet_drones/assets/rl.gif" alt="rl example" width="375"> <img src="gym_pybullet_drones/assets/marl.gif" alt="marl example" width="375">
 
 ### Run all tests
@@ -102,7 +95,6 @@ pytest tests/
 cd gym-pybullet-drones/
 pytest tests/
 ```
-
 
 ### Betaflight SITL example (Ubuntu only)
 
