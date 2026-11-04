@@ -20,8 +20,7 @@ DEFAULT_MA = False
 def play(model_path=DEFAULT_MODEL_PATH, multiagent=DEFAULT_MA, gui=DEFAULT_GUI):
     #### Load saved model ####
     if not os.path.isfile(model_path):
-        print(f"[ERROR] Model file not found at: {model_path}")
-        return
+        raise FileNotFoundError(f"Model file not found at: {model_path}")
 
     model = PPO.load(model_path)
     print(f"[INFO] Loaded model from {model_path}")
@@ -54,8 +53,8 @@ def play(model_path=DEFAULT_MODEL_PATH, multiagent=DEFAULT_MA, gui=DEFAULT_GUI):
                     timestamp=i/env.CTRL_FREQ,
                     state=np.hstack([obs2[0:3],
                                      np.zeros(4),
-                                     obs2[3:15],
-                                     act2]),
+                                     obs2[3:12],
+                                     np.resize(act2, 4)]),
                     control=np.zeros(12))
             else:
                 for d in range(DEFAULT_AGENTS):
@@ -63,8 +62,8 @@ def play(model_path=DEFAULT_MODEL_PATH, multiagent=DEFAULT_MA, gui=DEFAULT_GUI):
                         timestamp=i/env.CTRL_FREQ,
                         state=np.hstack([obs2[d][0:3],
                                          np.zeros(4),
-                                         obs2[d][3:15],
-                                         act2[d]]),
+                                         obs2[d][3:12],
+                                         np.resize(act2[d], 4)]),
                         control=np.zeros(12))
 
         env.render()

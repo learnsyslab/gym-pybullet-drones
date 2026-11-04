@@ -200,8 +200,7 @@ class CTBRControl(object):
         """
         ATTR_LIST = ['P_COEFF_FOR', 'I_COEFF_FOR', 'D_COEFF_FOR', 'P_COEFF_TOR', 'I_COEFF_TOR', 'D_COEFF_TOR']
         if not all(hasattr(self, attr) for attr in ATTR_LIST):
-            print("[ERROR] in BaseControl.setPIDCoefficients(), not all PID coefficients exist as attributes in the instantiated control class.")
-            exit()
+            raise AttributeError("in BaseControl.setPIDCoefficients(), not all PID coefficients exist as attributes in the instantiated control class.")
         else:
             self.P_COEFF_FOR = self.P_COEFF_FOR if p_coeff_pos is None else p_coeff_pos
             self.I_COEFF_FOR = self.I_COEFF_FOR if i_coeff_pos is None else i_coeff_pos

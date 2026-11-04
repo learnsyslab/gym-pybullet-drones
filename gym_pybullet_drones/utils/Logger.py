@@ -101,7 +101,7 @@ class Logger(object):
 
         """
         if drone < 0 or drone >= self.NUM_DRONES or timestamp < 0 or len(state) != 20 or len(control) != 12:
-            print("[ERROR] in Logger.log(), invalid data")
+            raise ValueError("in Logger.log(), invalid data")
         current_counter = int(self.counters[drone])
         #### Add rows to the matrices if a counter exceeds their size
         if current_counter >= self.timestamps.shape[1]:
@@ -142,7 +142,7 @@ class Logger(object):
         csv_dir = os.path.join(self.OUTPUT_FOLDER, "save-flight-"+comment+"-"+datetime.now().strftime("%m.%d.%Y_%H.%M.%S"))
         if not os.path.exists(csv_dir):
             os.makedirs(csv_dir+'/')
-        t = np.arange(0, self.timestamps.shape[1]/self.LOGGING_FREQ_HZ, 1/self.LOGGING_FREQ_HZ)
+        t = np.arange(self.timestamps.shape[1]) / self.LOGGING_FREQ_HZ
         for i in range(self.NUM_DRONES):
             with open(csv_dir+"/x"+str(i)+".csv", 'wb') as out_file:
                 np.savetxt(out_file, np.transpose(np.vstack([t, self.states[i, 0, :]])), delimiter=",")
@@ -214,7 +214,7 @@ class Logger(object):
         #### Loop over colors and line styles ######################
         plt.rc('axes', prop_cycle=(cycler('color', ['r', 'g', 'b', 'y']) + cycler('linestyle', ['-', '--', ':', '-.'])))
         fig, axs = plt.subplots(10, 2)
-        t = np.arange(0, self.timestamps.shape[1]/self.LOGGING_FREQ_HZ, 1/self.LOGGING_FREQ_HZ)
+        t = np.arange(self.timestamps.shape[1]) / self.LOGGING_FREQ_HZ
 
         #### Column ################################################
         col = 0

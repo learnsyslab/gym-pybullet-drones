@@ -12,8 +12,8 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pillow = "^12.3"
-setuptools = ">=83"
+pillow = "^13.0"
+setuptools = ">=84.1"
 torch = "^2.13"
 numpy = "^2.5"
 scipy = "^1.18"

@@ -18,8 +18,7 @@ class MRACControl(BaseControl):
     def __init__(self, drone_model: DroneModel, g: float = 9.8):
         super().__init__(drone_model=drone_model, g=g)
         if self.DRONE_MODEL not in [DroneModel.CF2X, DroneModel.CF2P, DroneModel.RACE]:
-            print("[ERROR] MRAC requires DroneModel.CF2X or DroneModel.CF2P or DroneModel.RACE")
-            exit()
+            raise ValueError("MRAC requires DroneModel.CF2X or DroneModel.CF2P or DroneModel.RACE")
         self.Ixx = self._getURDFParameter("ixx")
         self.Iyy = self._getURDFParameter("iyy")
         self.Izz = self._getURDFParameter("izz")
