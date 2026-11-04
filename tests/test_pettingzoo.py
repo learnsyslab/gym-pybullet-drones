@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from pettingzoo.test import parallel_api_test, parallel_seed_test
+from pettingzoo.test import parallel_api_test
 
 from gym_pybullet_drones.envs.MultiHoverAviary import MultiHoverAviary
 from gym_pybullet_drones.utils.enums import ActionType
