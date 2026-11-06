@@ -69,6 +69,8 @@ python learn.py --multiagent true
 LATEST_MODEL=$(ls -t results | head -n 1) && python play.py --multiagent true --model_path "results/${LATEST_MODEL}/best_model.zip"
 ```
 
+<img src="gym_pybullet_drones/assets/rl.gif" alt="rl example" width="375"> <img src="gym_pybullet_drones/assets/marl.gif" alt="marl example" width="375">
+
 ### Multi-agent RL with PettingZoo
 
 `PettingZooWrapper` exposes any multi-drone aviary through [PettingZoo](https://pettingzoo.farama.org)'s Parallel API, with one agent per drone (`drone_0`, `drone_1`, ...). That makes it usable with MARL libraries built on PettingZoo.
@@ -94,16 +96,6 @@ cd gym_pybullet_drones/examples/
 python pettingzoo_multiagent.py
 ```
 
-<img src="gym_pybullet_drones/assets/rl.gif" alt="rl example" width="375"> <img src="gym_pybullet_drones/assets/marl.gif" alt="marl example" width="375">
-
-### Run all tests
-
-```sh
-# from the repo's top folder
-cd gym-pybullet-drones/
-pytest tests/
-```
-
 ### Betaflight SITL example (Ubuntu only)
 
 ```sh
@@ -115,6 +107,14 @@ cd gym-pybullet-drones/
 cd gym_pybullet_drones/examples/
 python3 beta.py --num_drones 2
 # --num_drones must be <= the number passed to clone_bfs.sh
+```
+
+### Run all tests
+
+```sh
+# from the repo's top folder
+cd gym-pybullet-drones/
+pytest tests/
 ```
 
 ## Citation
@@ -155,8 +155,4 @@ If you wish, please cite our [IROS 2021 paper](https://arxiv.org/abs/2103.02142)
 
 - [ ] Add motor delay, advanced ESC modeling by implementing a buffer in `BaseAviary._dynamics()`
 - [ ] Replace `rpy` with quaternions (and `ang_vel` with body rates) by editing `BaseAviary._updateAndStoreKinematicInformation()`, `BaseAviary._getDroneStateVector()`, and the `.computeObs()` methods of relevant subclasses
-
-## Troubleshooting
-
-- On Ubuntu, with an NVIDIA card, if you receive a "Failed to create and OpenGL context" message, launch `nvidia-settings` and under "PRIME Profiles" select "NVIDIA (Performance Mode)", reboot and try again.
 -->
