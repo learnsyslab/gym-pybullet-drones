@@ -24,7 +24,8 @@ class VelocityAviary(BaseAviary):
                  record=False,
                  obstacles=False,
                  user_debug_gui=True,
-                 output_folder='results'
+                 output_folder='results',
+                 vision_attributes=False
                  ):
         """Initialization of an aviary environment for or high-level planning.
 
@@ -54,6 +55,8 @@ class VelocityAviary(BaseAviary):
             Whether to add obstacles to the simulation.
         user_debug_gui : bool, optional
             Whether to draw the drones' axes and the GUI RPMs sliders.
+        vision_attributes : bool, optional
+            Whether to allocate the attributes needed by vision-based aviary subclasses.
 
         """
         #### Create integrated controllers #########################
@@ -72,7 +75,8 @@ class VelocityAviary(BaseAviary):
                          record=record,
                          obstacles=obstacles,
                          user_debug_gui=user_debug_gui,
-                         output_folder=output_folder
+                         output_folder=output_folder,
+                         vision_attributes=vision_attributes
                          )
         #### Set a limit on the maximum target speed ###############
         self.SPEED_LIMIT = 0.03 * self.MAX_SPEED_KMH * (1000/3600)
