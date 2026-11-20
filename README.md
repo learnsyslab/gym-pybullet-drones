@@ -86,7 +86,14 @@ while env.agents:
     observations, rewards, terminations, truncations, infos = env.step(actions)
 env.close()
 ```
+### Posed onboard camera recording
 
+[`CameraRecorder`](gym_pybullet_drones/utils/CameraRecorder.py) saves frames from a body-fixed camera together with their camera-to-world poses (OpenCV camera axes, `poses.csv`), pinhole intrinsics and, optionally, metric depth, e.g. for visual odometry, SLAM, novel-view synthesis or world-model training data
+
+```sh
+cd gym_pybullet_drones/examples/
+python3 record_camera.py --camera_hz 12 --duration_sec 12
+```
 Each agent receives its own row of the aviary's observation. The aviary's team reward and episode flags are shared by all agents, and `env.state()` returns every drone's kinematics for centralised critics.
 
 ```sh
