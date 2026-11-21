@@ -10,6 +10,7 @@ from gym_pybullet_drones.control.DSLPIDControl import DSLPIDControl
 
 class BaseRLAviary(BaseAviary):
     """Base single and multi-agent environment class for reinforcement learning."""
+    PRINT_URDF_PARAMS = False
     
     ################################################################################
 
