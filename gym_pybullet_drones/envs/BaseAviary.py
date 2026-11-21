@@ -143,6 +143,8 @@ class BaseAviary(gym.Env):
             if self.RECORD:
                 for i in range(self.NUM_DRONES):
                     os.makedirs(os.path.dirname(self.ONBOARD_IMG_PATH+"/drone_"+str(i)+"/"), exist_ok=True)
+        else:
+            self.IMG_RES = None
         #### Connect to PyBullet ###################################
         if self.GUI:
             #### With debug GUI ########################################
@@ -586,7 +588,7 @@ class BaseAviary(gym.Env):
 
         """
         if self.IMG_RES is None:
-            raise ValueError("in BaseAviary._getDroneImages(), remember to set self.IMG_RES to np.array([width, height])")
+            raise ValueError("in BaseAviary._getDroneImages(), set vision_attributes=True (or set self.IMG_RES to np.array([width, height]))")
         rot_mat = np.array(p.getMatrixFromQuaternion(self.quat[nth_drone, :])).reshape(3, 3)
         #### Set target point, camera view and projection matrices #
         target = np.dot(rot_mat,np.array([1000, 0, 0])) + np.array(self.pos[nth_drone, :])
